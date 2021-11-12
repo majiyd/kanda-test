@@ -7,24 +7,17 @@ from schemas.signup import SignupSchema
 
 
 class SignupResource:
-    def on_get(self, req, resp):
-        """Handles get Request for sign up"""
-        quote = {
-            'author': "hi"
-        }
-
-        resp.body = json.dumps(quote)
-        resp.status = falcon.HTTP_200
-
     def on_post(self, req, resp):
-        """handles post request"""
+        """handles sign up request"""
 
         try:
+            # ensure body is not empty
             if req.content_length in (None, 0):
-                return
+                SignupSchema().load({})
 
             body = json.loads(req.bounded_stream.read())
 
+            # validate data
             SignupSchema().load(body)
 
             resp.body = json.dumps({})
