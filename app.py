@@ -3,14 +3,12 @@ import falcon
 
 from signup import SignupResource
 
-app = falcon.App()
 
-signupHandler = SignupResource()
-app.add_route('/', signupHandler)
+def create():
+    app = falcon.App()
+    signupHandler = SignupResource()
+    app.add_route('/', signupHandler)
+    return app
 
-if __name__ == '__main__':
-    with make_server('', 8000, app) as httpd:
-        print('Serving on port 8000...')
 
-        # Serve until process is killed
-        httpd.serve_forever()
+app = application = create()

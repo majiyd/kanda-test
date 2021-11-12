@@ -34,6 +34,5 @@ class SignupResource:
             resp.body = json.dumps({
                 "error": "Bad request",
                 "field_errors": err.messages,
-                "data": body
             })
             resp.status = falcon.HTTP_400
