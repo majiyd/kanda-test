@@ -1,6 +1,7 @@
 import json
 import falcon
 from marshmallow import schema, ValidationError
+from marshmallow.utils import pprint
 
 from schemas.signup import SignupSchema
 
@@ -19,11 +20,20 @@ class SignupResource:
         """handles post request"""
 
         try:
-            SignupSchema(strict=True).load({})
+            if req.content_length in (None, 0):
+                return
 
-            resp.body = json.dumps({"5": "56"})
+            body = json.loads(req.bounded_stream.read())
+
+            SignupSchema().load(body)
+
+            resp.body = json.dumps({})
             resp.status = falcon.HTTP_201
 
         except ValidationError as err:
-            resp.body = json.dumps(err.messages)
+            resp.body = json.dumps({
+                "error": "Bad request",
+                "field_errors": err.messages,
+                "data": body
+            })
             resp.status = falcon.HTTP_400
