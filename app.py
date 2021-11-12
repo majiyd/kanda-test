@@ -11,4 +11,5 @@ def create():
     return app
 
 
+# initialize app
 app = application = create()
